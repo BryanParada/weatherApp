@@ -1,12 +1,19 @@
-import {
-    leerInput } from './helpers/inquirer.js';
+import {inquirerMenu,
+        readInput,
+        pause } from './helpers/inquirer.js';
 
 const main = async() =>{
     
-    const text = await leerInput('Hi: ')
-
-    console.log(text);
+    let opt;
     
+    do{ 
+      opt = await inquirerMenu();  
+      console.log(opt);
+      
+ 
+    if ( opt !== 0) await pause();
+
+  } while(opt !== 0);
 }
 
 main();
