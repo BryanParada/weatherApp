@@ -28,9 +28,14 @@ const main = async() =>{
             console.log('Place not found!');
           }else{
             const idSel = await listPlaces(places)
-            const placeSelected = places.find( p => p.id === idSel) 
+            if (idSel === '0') continue;
             
-  
+            const placeSelected = places.find( p => p.id === idSel) 
+
+            //guardar en DB
+            searches.addHistory( placeSelected.name)
+            
+             
             //clima
             const weather = await searches.weatherPlace(placeSelected.lat, placeSelected.lng); 
             //console.log(weather);
@@ -49,6 +54,16 @@ const main = async() =>{
             
             
           } 
+          break;
+
+          case 2:
+            // searches.history.forEach( (place, i) =>{ 
+            searches.historyCapitalize.forEach( (place, i) =>{
+              const idx = `${i+1}`.green;
+              console.log(`${idx} ${ place}`);
+              
+            } )
+            
           break;
       }
 

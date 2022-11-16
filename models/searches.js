@@ -1,12 +1,28 @@
-
 import axios from 'axios';
+import capitalize from 'capitalize';
+import * as fs from 'fs';
 
 class Searches {
 
-    history = ['Santiago', 'Madrid','San José'];
+    history = [];
+    dbPath = './db/database.json'
 
     constructor() {
-        //TODO: leer db si existe
+        this.readDB();
+    }
+
+    get historyCapitalize(){
+        // sin libreria capitalize
+        // return this.history.map( place =>{
+        //     let words = place.split(' ');
+        //     words = words.map( w => w[0].toUpperCase() + w.substring(1) );
+
+        //     return words.join(' ')
+        // })
+
+        return this.history.map( place =>{
+            return capitalize.words(place);
+        })
     }
 
     get paramsMapbox(){
@@ -70,26 +86,48 @@ class Searches {
                 max: main.temp_max,
                 temp: main.temp
             }
-
-            // return resp.data.weather.map( weather, main => ({
-            //     desc: weather.description,
-            //     min: main.temp_min,
-            //     max: main.temp_max,
-            //     temp: main.temp
-
-            // }));
-
-        // return {
-        //     desc: '',
-        //     min: '',
-        //     max: '',
-        //     desc: ''
-        // }
+ 
             
         } catch (error) {
             console.log(error);
             
         }
+
+    }
+
+    addHistory( place = ''){ 
+
+    if ( this.history.includes(place.toLocaleLowerCase() )){
+        return;
+    }
+    this.history = this.history.splice(0,5);
+
+    this.history.unshift( place.toLocaleLowerCase() ); //añade al inicio
+
+    //grabar en DB
+    this.storeDB();
+
+    }
+
+    storeDB(){
+
+        const payload = {
+            history: this.history
+        };
+
+        fs.writeFileSync( this.dbPath, JSON.stringify( payload ));
+    }
+
+    readDB(){
+        // debe existir
+        if ( !fs.existsSync(this.dbPath) ){ 
+            return ;
+        }
+        const info = fs.readFileSync(this.dbPath, { encoding: 'utf-8' });
+
+        const data = JSON.parse(info); 
+        
+        this.history = data.history; 
 
     }
 
