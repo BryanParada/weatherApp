@@ -11,8 +11,8 @@ class Searches {
 
     get paramsMapbox(){
         return{
-            'language': 'en-es', //en%2Ces
-            'access_token': 'pk.eyJ1IjoiYnJ5YW4tcGMiLCJhIjoiY2xhNzRrc3NvMDJ6djQxb3ozNW8zcnpwayJ9.-5db4LGACiAHDDwIWOwVxw' 
+            'language': 'es', //en%2Ces
+            'access_token': process.env.MAPBOX_KEY
         }
 
 
@@ -29,10 +29,14 @@ class Searches {
                 params: this.paramsMapbox
             });
  
-            const resp = await instance.get();
+            const resp = await instance.get(); 
+            return resp.data.features.map( place => ({
+                id: place.id,
+                name: place.place_name_es,
+                lng: place.center[0],
+                lat: place.center[1],
 
-            //const resp = await axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/santiago.json?language=en%2Ces&access_token=pk.eyJ1IjoiYnJ5YW4tcGMiLCJhIjoiY2xhNzRrc3NvMDJ6djQxb3ozNW8zcnpwayJ9.-5db4LGACiAHDDwIWOwVxw')
-            console.log(resp.data);
+            }));
 
             return []
             
