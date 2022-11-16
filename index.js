@@ -24,24 +24,31 @@ const main = async() =>{
           const places = await searches.city( term );
            
           //seleccionar el lugar
-          const idSel = await listPlaces(places)
-          const placeSelected = places.find( p => p.id === idSel) 
-          
-
-          //clima
-
-          // mostrar resultados
-          console.log('\nInfo from the city\n'.green);
-          console.log('City:', placeSelected.name);
-          console.log('Lat:', placeSelected.lat);
-          console.log('Lng:', placeSelected.lng);
-          console.log('Temperature:', );
-          console.log('Minimum:', );
-          console.log('Maximum:', );
-          
-          
-          
-
+          if (places.length === 0){
+            console.log('Place not found!');
+          }else{
+            const idSel = await listPlaces(places)
+            const placeSelected = places.find( p => p.id === idSel) 
+            
+  
+            //clima
+            const weather = await searches.weatherPlace(placeSelected.lat, placeSelected.lng); 
+            //console.log(weather);
+            
+  
+            // mostrar resultados
+            console.clear();
+            console.log('\nInfo from the city\n'.green);
+            console.log('City:', placeSelected.name);
+            console.log('Lat:', placeSelected.lat);
+            console.log('Lng:', placeSelected.lng);
+            console.log('Temperature:', weather.temp);
+            console.log('Minimum:', weather.min );
+            console.log('Maximum:', weather.max);
+            console.log('Weather:', weather.desc.green);
+            
+            
+          } 
           break;
       }
 
