@@ -32,7 +32,7 @@ A node.js app to access weather data
 * fs (filesystem) package
 * capitalize package
 
-## Instalación
+## Instalation
 
 - To install the app type the next command in terminal
 
